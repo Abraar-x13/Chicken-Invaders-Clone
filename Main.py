@@ -10,18 +10,18 @@ height = 540
 wn.setup(width+20, height+20)
 wn.bgcolor("black")
 wn.title("Space Invaders")
-wn.bgpic("src/background.gif")
+wn.bgpic("/home/abraar/Documents/CODE STUF/GitHub Backup/Chicken-Invaders-Clone/src/background.gif")
 wn.tracer(0)
 
 # Custom Shapes
-wn.register_shape("src/chickff.gif")
-wn.register_shape("src/player.gif")
-wn.register_shape("src/missile.gif")
+wn.register_shape("/home/abraar/Documents/CODE STUF/GitHub Backup/Chicken-Invaders-Clone/src/chickff.gif")
+wn.register_shape("/home/abraar/Documents/CODE STUF/GitHub Backup/Chicken-Invaders-Clone/src/player.gif")
+wn.register_shape("/home/abraar/Documents/CODE STUF/GitHub Backup/Chicken-Invaders-Clone/src/missile.gif")
 
 # Drawing border
 border_pen = turtle.Turtle()
-border_pen.speed(1)
-border_pen.color("pink")
+border_pen.speed(0)
+border_pen.color("black")
 border_pen.penup()
 lcx = -width/2
 lcy = -height/2
@@ -37,7 +37,7 @@ border_pen.lt(90)
 border_pen.fd(height)
 border_pen.hideturtle()
 
-# score initialize kortesi
+
 score = 0
 
 # Drawing the score
@@ -45,15 +45,15 @@ score_pen = turtle.Turtle()
 score_pen.speed(0)
 score_pen.color("pink")
 score_pen.penup()
-score_pen.setposition(0, width/2)
+score_pen.setposition(100, 100)
 scorestring = "Score: {}".format(score)
-score_pen.write(scorestring, False, align="left", font=("Arial", 14, "normal"))
+score_pen.write(scorestring, False, align="left", font=("Arial", 14, "bold"))
 score_pen.hideturtle()
 
 # Creatng the Spaceship
 player = turtle.Turtle()
 player.color("blue")
-player.shape("src/player.gif")
+player.shape("/home/abraar/Documents/CODE STUF/GitHub Backup/Chicken-Invaders-Clone/src/player.gif")
 player.penup()
 player.speed(0)
 buffer_player_y = 30
@@ -72,7 +72,7 @@ for i in range(number_of_enemies):
 	enemies.append(turtle.Turtle())
 
 for enemy in enemies:
-	enemy.shape('src/chickff.gif')
+	enemy.shape('/home/abraar/Documents/CODE STUF/GitHub Backup/Chicken-Invaders-Clone/src/chickff.gif')
 	enemy.penup()
 	enemy.speed(0)
 	x = random.randint(int(-width/2 +60), int(width/2 -60))
@@ -83,7 +83,7 @@ enemyspeed = 0.05
 
 # Create the player's bullet
 bullet = turtle.Turtle()
-bullet.shape("src/missile.gif")
+bullet.shape("/home/abraar/Documents/CODE STUF/GitHub Backup/Chicken-Invaders-Clone/src/missile.gif")
 bullet.penup()
 bullet.speed(0)
 bullet.setheading(90)
