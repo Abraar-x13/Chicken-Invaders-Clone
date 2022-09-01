@@ -1,138 +1,100 @@
 import turtle
-# import os
 import math
 import random
 
-# Screen Setup
-wn = turtle.Screen()
-width = 960
-height = 540
-wn.setup(width+20, height+20)
-wn.bgcolor("black")
-wn.title("Space Invaders")
-wn.bgpic("/home/abraar/Documents/CODE STUF/GitHub Backup/Chicken-Invaders-Clone/src/background.gif")
-wn.tracer(0)
-
-# Custom Shapes
-wn.register_shape("/home/abraar/Documents/CODE STUF/GitHub Backup/Chicken-Invaders-Clone/src/chickff.gif")
-wn.register_shape("/home/abraar/Documents/CODE STUF/GitHub Backup/Chicken-Invaders-Clone/src/player.gif")
-wn.register_shape("/home/abraar/Documents/CODE STUF/GitHub Backup/Chicken-Invaders-Clone/src/missile.gif")
-
-# Drawing border
-border_pen = turtle.Turtle()
-border_pen.speed(0)
-border_pen.color("black")
-border_pen.penup()
-lcx = -width/2
-lcy = -height/2
-border_pen.setposition(lcx, lcy)
-border_pen.pendown()
-border_pen.pensize(1)
-border_pen.fd(width)
-border_pen.lt(90)
-border_pen.fd(height)
-border_pen.lt(90)
-border_pen.fd(width)
-border_pen.lt(90)
-border_pen.fd(height)
-border_pen.hideturtle()
-
-
+# Variables
+start_screen = "/home/abraar/Documents/CODE STUF/GitHub Backup/Chicken-Invaders-Clone/src/start_screen1.gif"
+game_screen = "/home/abraar/Documents/CODE STUF/GitHub Backup/Chicken-Invaders-Clone/src/background.gif"
+game_over_screen = "/home/abraar/Documents/CODE STUF/GitHub Backup/Chicken-Invaders-Clone/src/gameoverscreen.gif"
+shape_chicken = "/home/abraar/Documents/CODE STUF/GitHub Backup/Chicken-Invaders-Clone/src/chickff.gif"
+shape_player = "/home/abraar/Documents/CODE STUF/GitHub Backup/Chicken-Invaders-Clone/src/player.gif"
+shape_missile = "/home/abraar/Documents/CODE STUF/GitHub Backup/Chicken-Invaders-Clone/src/missile.gif"
+shape_enemy = "/home/abraar/Documents/CODE STUF/GitHub Backup/Chicken-Invaders-Clone/src/chickff.gif"
+width, height = 960, 540
 score = 0
+number_of_enemies = 20
+enemies = [turtle.Turtle() for _ in range(number_of_enemies)]
+enemyspeed = 0.045  # Experimental value, change for your machine.
 
-# Drawing the score
-score_pen = turtle.Turtle()
-score_pen.speed(0)
-score_pen.color("pink")
-score_pen.penup()
-score_pen.setposition(100, 100)
-scorestring = "Score: {}".format(score)
-score_pen.write(scorestring, False, align="left", font=("Arial", 14, "bold"))
-score_pen.hideturtle()
 
-# Creatng the Spaceship
+# Window Setup
+wn = turtle.Screen()
+wn.setup(width+60, height+60)
+wn.bgcolor("black")
+wn.title("Chiken Invaders")
+wn.tracer(0)
+wn.bgpic(start_screen)
+player_name = wn.textinput("player_name", " Player Name :")
+wn.bgpic(game_screen)
+wn.register_shape(shape_chicken)
+wn.register_shape(shape_player)
+wn.register_shape(shape_missile)
+
+
+# Player Spaceship Setup
 player = turtle.Turtle()
 player.color("blue")
-player.shape("/home/abraar/Documents/CODE STUF/GitHub Backup/Chicken-Invaders-Clone/src/player.gif")
+player.shape(shape_player)
 player.penup()
 player.speed(0)
-buffer_player_y = 30
-player.setposition(0, buffer_player_y-(height/2))
-#  player.setheading(90) (for triangle)
-
+player.setposition(0, 30-(height/2))
 player.speed = 0
 
-# Choose a number of enemies
-number_of_enemies = 20
-# Create an empty list of enemies
-enemies = []
 
-# Add enemies to the list
-for i in range(number_of_enemies):
-	enemies.append(turtle.Turtle())
-
+# Enemy Setup
 for enemy in enemies:
-	enemy.shape('/home/abraar/Documents/CODE STUF/GitHub Backup/Chicken-Invaders-Clone/src/chickff.gif')
+	enemy.shape(shape_enemy)
 	enemy.penup()
 	enemy.speed(0)
 	x = random.randint(int(-width/2 +60), int(width/2 -60))
 	y = random.randint( 80, int(height/2 - 60))
 	enemy.setposition(x, y)
-enemyspeed = 0.05
 
 
-# Create the player's bullet
+# Bullet Setup
 bullet = turtle.Turtle()
-bullet.shape("/home/abraar/Documents/CODE STUF/GitHub Backup/Chicken-Invaders-Clone/src/missile.gif")
+bullet.shape(shape_missile)
 bullet.penup()
 bullet.speed(0)
 bullet.setheading(90)
 bullet.shapesize(0.8, 0.8)
 bullet.hideturtle()
-
 bulletspeed = 15
-
-# Define bullet state
-# ready - ready to fire
-# fire - bullet is firing
 bulletstate = "ready"
 
 
-# Move the player left and right
+# Scoring System
+score_pen = turtle.Turtle()
+def update_score(_score, _x = -120, _y = 250, _fontsz = 14):
+	score_pen.speed(0)
+	score_pen.pensize(5)
+	score_pen.color("white")
+	score_pen.penup()
+	score_pen.setposition(_x, _y)
+	scorestring = f"Player : {player_name}	Score : {_score}"
+	score_pen.write(scorestring, False, align="left", font=("Arial", _fontsz, "bold"))
+	score_pen.hideturtle()
+update_score(0)
+
+
+# Functions to move player
 def move_left():
 	player.speed = -25
-	x = player.xcor()
-	x += player.speed
-# jodi boundari set korte chai -	if x < -280: x = - 280
+	x = player.xcor() + player.speed
 	player.setx(x)
 def move_right():
 	player.speed = 25
-	x = player.xcor()
-	x += player.speed
-# jodi boundari set korte chai -	if x < -280: x = - 280
+	x = player.xcor() + player.speed
 	player.setx(x)
-
-#def move_up():
-#	player.speed = 15
-#def move_down():
-#	player.speed = -15
-
-#def move_players_Y():
-#	y = player.ycor()
-#	y += player.speed/2
-#	player.sety(y)
 
 
 def fire_bullet():
-	# Declare bulletstate as a global if it needs changed
 	global bulletstate
 	if bulletstate == "ready":
 		bulletstate = "fire"
-		# Move the bullet to the just above the player
-		x = player.xcor()
-		y = player.ycor() + 20
-		bullet.setposition(x, y)
+		bullet.setposition(player.xcor(), player.ycor() + 20)
 		bullet.showturtle()
+
 
 def isCollision(t1, t2):
 	distance = math.sqrt(math.pow(t1.xcor()-t2.xcor(),2)+math.pow(t1.ycor()-t2.ycor(),2))
@@ -140,69 +102,69 @@ def isCollision(t1, t2):
 		return True
 	else:
 		return False
-# Create keyboard bindings
+
+
+# Keyboard Bindings
 wn.listen()
 wn.onkeypress(move_left, "Left")
 wn.onkeypress(move_right, "Right")
-#wn.onkeypress(move_up, "Up")
-#wn.onkeypress(move_down, "Down")
 wn.onkeypress(fire_bullet, "space")
 
-# Main game loop
-while True:
+
+# Main Game loop
+is_alive = True
+while is_alive:
+    
 	wn.update()
-
-	for enemy in enemies:
-		# Move the enemy
-		x = enemy.xcor()
-		x += enemyspeed
-		enemy.setx(x)
-
-		# Move the enemy back and down
-		if enemy.xcor() > ((width/2)-25):
-			for e in enemies:
-				y = e.ycor()
-				y -= 50
-				e.sety(y)
-			enemyspeed *= -1.02
-
-		if enemy.xcor() < -((width/2)-25):
-			for e in enemies:
-				y = e.ycor()
-				y -= 50
-				e.sety(y)
-			enemyspeed *= -1.02
-
-		# Check for a collision between the bullet and the enemy
-		if isCollision(bullet, enemy):
-			# Reset the bullet
-			bullet.hideturtle()
-			bulletstate = "ready"
-			bullet.setposition(0, -400)
-			# Reset the enemy
-			x = random.randint(int(-width/2 +60), int(width/2 -60))
-			y = random.randint( 80 , int(height/2 -60))
-			enemy.setposition(x, y)
-			# Update the score
-			score += 10
-			scorestring = "Score: {}".format(score)
-			score_pen.clear()
-			score_pen.write(scorestring, False, align="left", font=("Arial", 14, "normal"))
-
-		if isCollision(player, enemy):
-			player.hideturtle()
-			enemy.hideturtle()
-			print ("Game Over")
-			break
-
-
-	# Move the bullet
+	
 	if bulletstate == "fire":
 		y = bullet.ycor()
 		y += bulletspeed
 		bullet.sety(y)
 
-	# Check to see if the bullet has gone to the top
 	if bullet.ycor() > height-40:
 		bullet.hideturtle()
 		bulletstate = "ready"
+  
+
+	for enemy in enemies:
+		x = enemy.xcor()
+		x += enemyspeed
+		enemy.setx(x)
+
+		if enemy.xcor() > ((width/2)-25):
+			for e in enemies:
+				e.sety(e.ycor() - 50)
+			enemyspeed *= -1.015
+
+		if enemy.xcor() < -((width/2)-25):
+			for e in enemies:
+				e.sety(e.ycor() - 50)
+			enemyspeed *= -1.015
+
+		if isCollision(bullet, enemy):
+
+			bullet.hideturtle()
+			bulletstate = "ready"
+			bullet.setposition(0, -400)
+
+			x = random.randint(int(-width/2 +60), int(width/2 -60))
+			y = random.randint( 80 , int(height/2 -60))
+			enemy.setposition(x, y)
+
+			score += 10
+			score_pen.clear()
+			update_score(score)
+
+		if isCollision(player, enemy):
+			is_alive = False
+			wn.clear()
+			break
+
+
+# Game Over Screen
+while True:
+    wn.bgpic(game_over_screen)
+    update_score(score, -165, -50, 20)
+    wn.update()
+ 
