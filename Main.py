@@ -3,18 +3,17 @@ import math
 import random
 
 # Variables
-start_screen = "/home/abraar/Documents/CODE STUF/GitHub Backup/Chicken-Invaders-Clone/src/start_screen1.gif"
-game_screen = "/home/abraar/Documents/CODE STUF/GitHub Backup/Chicken-Invaders-Clone/src/background.gif"
-game_over_screen = "/home/abraar/Documents/CODE STUF/GitHub Backup/Chicken-Invaders-Clone/src/gameoverscreen.gif"
-shape_chicken = "/home/abraar/Documents/CODE STUF/GitHub Backup/Chicken-Invaders-Clone/src/chickff.gif"
-shape_player = "/home/abraar/Documents/CODE STUF/GitHub Backup/Chicken-Invaders-Clone/src/player.gif"
-shape_missile = "/home/abraar/Documents/CODE STUF/GitHub Backup/Chicken-Invaders-Clone/src/missile.gif"
-shape_enemy = "/home/abraar/Documents/CODE STUF/GitHub Backup/Chicken-Invaders-Clone/src/chickff.gif"
+start_screen = "src/start_screen1.gif"
+game_screen = "src/background.gif"
+game_over_screen = "src/gameoverscreen.gif"
+shape_chicken = "src/chickff.gif"
+shape_player = "src/player.gif"
+shape_missile = "src/missile.gif"
+shape_enemy = "src/chickff.gif"
 width, height = 960, 540
-score = 0
-number_of_enemies = 20
-enemies = [turtle.Turtle() for _ in range(number_of_enemies)]
-enemyspeed = 0.045  # Experimental value, change for your machine.
+score, number_of_enemies = 0, 20
+enemies, enemyspeed = [turtle.Turtle() for _ in range(number_of_enemies)], 0.045
+# Note : 'enemyspeed' is an experimental value, have to change for different machines.
 
 
 # Window Setup
@@ -41,16 +40,6 @@ player.setposition(0, 30-(height/2))
 player.speed = 0
 
 
-# Enemy Setup
-for enemy in enemies:
-	enemy.shape(shape_enemy)
-	enemy.penup()
-	enemy.speed(0)
-	x = random.randint(int(-width/2 +60), int(width/2 -60))
-	y = random.randint( 80, int(height/2 - 60))
-	enemy.setposition(x, y)
-
-
 # Bullet Setup
 bullet = turtle.Turtle()
 bullet.shape(shape_missile)
@@ -61,6 +50,17 @@ bullet.shapesize(0.8, 0.8)
 bullet.hideturtle()
 bulletspeed = 15
 bulletstate = "ready"
+
+
+# Enemy Setup
+for enemy in enemies:
+	enemy.shape(shape_enemy)
+	enemy.penup()
+	enemy.speed(0)
+	x = random.randint(int(-width/2 +60), int(width/2 -60))
+	y = random.randint( 80, int(height/2 - 60))
+	enemy.setposition(x, y)
+
 
 
 # Scoring System
